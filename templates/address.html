@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %} Fill Address {% endblock title %}
+{% block body %}
+<div class="col mainContainer my-4" id="addressContainer">
+    <h2 id="mainh2">Enter Address & Other Details:</h2>
+    <form method="post" action="/checkout/address/" style="padding: 10px;">{% csrf_token %}
+        <input type="hidden" name="items_json" id="items_json">
+        <input type="hidden" name="total_price" id="total_price">
+
+        <input type="hidden" name="existing_add" id="existing_add" value="False">
+{% if address_status %}
+<div id="prev_add" class="d-flex row" style="
+    justify-content: space-around;
+    margin-bottom: 30px;
+">
+<div class="form-check">
+<div class="form-check">
+  <input onchange="addRadioFunc()" class="form-check-input" type="radio" name="default_add" id="old_add" required>
+  <label class="form-check-label" for="old_add">
+    Use Existing Address
+  </label>
+</div>
+<div class="form-check">
+  <input onchange="addRadioFunc()" class="form-check-input" type="radio" name="default_add" id="new_add">
+  <label class="form-check-label" for="new_add">
+    New Address
+  </label>
+</div>
+</div>
+<div class="card" style="width: 18rem; background:rgba(0,0,0,0.7);" id="add">
+  <ul class="list-group list-group-flush">
+  
+    <li style="background:rgba(0,0,0,0.7);" class="list-group-item">{{address_status.0.0.name}}</li>
+    
+    <li class="list-group-item" style="background:rgba(0,0,0,0.7);">{{address_status.0.0.address}}</li>
+    <li class="list-group-item" style="background:rgba(0,0,0,0.7);">{{address_status.0.0.city}} - {{address_status.0.0.zip_code}}, {{address_status.0.0.state}}</li>
+    <li class="list-group-item" style="background:rgba(0,0,0,0.7);">+91-{{address_status.0.0.phone}}</li>
+    
+  </ul>
+  <div class="card-footer" style="color:#dc3545">Default Address</div>
+</div>
+</div>
+
+
+{% endif %}
+     <div id="add_status">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address1">Address</label>
+            <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St">
+        </div>
+        <div class="form-group">
+            <label for="address2">Address line 2</label>
+            <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="state">State</label>
+                <input type="text" class="form-control" id="state" name="state"  placeholder="Enter State">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="zip_code">Zip</label>
+                <input type="text" class="form-control" id="zip_code" name="zip_code">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone">
+        </div>
+       </div>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Payment</legend>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment" id="cod" value="cod" checked>
+                        <label class="form-check-label" for="cod">
+                            Cash on delivery
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment" id="online" value="online">
+                        <label class="form-check-label" for="online">
+                            Online Payment
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <button type="submit" class="btn">Place Order</button>
+    </form>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+
+   let itemsJson = {}
+    
+    if (localStorage.getItem('itemJson') == null){
+        window.location = '/';
+    }
+    else{
+        itemsJson = JSON.parse(localStorage.getItem('itemJson'))
+    }
+    let total_price = itemsJson['total'];
+    delete itemsJson.total;
+    document.getElementById('items_json').value = JSON.stringify(itemsJson);
+    document.getElementById('total_price').value = total_price;
+
+{% if not user.is_authenticated %}
+alert('Please login first');
+window.location = '/';
+{% endif %}
+function addRadioFunc(){
+if(document.getElementById('new_add').checked){
+    document.getElementById('add').style.display = "none";
+    document.getElementById('add_status').style.display = "block";
+    document.getElementById('mainh2').innerHTML = "Enter Address & Other Details:";
+    document.getElementById('existing_add').value = 'False'
+}
+if(document.getElementById('old_add').checked){
+    document.getElementById('add').style.display = "block";
+    document.getElementById('add_status').style.display = "none";
+    document.getElementById('mainh2').innerHTML = "Select Address & Other Details:";
+    {% if address_status.0.0.id %}
+    document.getElementById('existing_add').value = {{address_status.0.0.id}}
+    {% endif %}
+}
+}
+    {% if address_status %}
+    document.getElementById('add_status').style.display = "none";
+    document.getElementById('mainh2').innerHTML = "Select Address & Other Details:";
+    {% endif %}
+ 
+    {% if thank %}
+    alert("Thanks for ordering with us. Your order id is {{id}}. Use it to track your order using our order tracker")
+    localStorage.clear();
+    document.location="/";
+    {%endif%}
+
+</script>
+{% endblock js %}

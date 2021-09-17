@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %} {{ product.prod_name }} {% endblock title %}
+{% block body %}
+{% load static %}
+<div class="container">
+    <div class="row" style="background: rgba(0,0,0,0.5);
+    margin: auto;
+    margin-bottom: 15px;
+    border-radius: 15px;">
+        <div class="col-md-4">
+            <img src="/../{{ product.prod_img }}" class="img-thumbnail img-fluid card-img-top" width="233px"
+                height="300px" alt="product image" style="margin-top: 1rem">
+                <div class="row my-4 mx-4">
+                    <a href="/checkout/{{product.prod_id}}"> <button class="btn mx-2 btn-md    btn1" style="font-size: 15px"
+                          onclick="buyNow('pr{{product.prod_id}}')"  id="vp{{product.prod_id}}"><i class="fa fa-play-circle" style="font-size: 16px;"></i>Buy Now</button></a>
+                        <span id="addCartpr{{product.prod_id}}" class="addcart">
+                    <button class="btn btn-md btn2" style="font-size: 15px" onclick="adCart(this.id)" id="pr{{product.prod_id}}"><i class="fa fa-cart-plus" style="font-size: 16px;"></i> Add to Cart</button>
+                        </span>
+                </div>
+        </div>
+
+        <div class="col-md-8" style="margin-top: 1rem">
+            <div class="container mx-4">
+                <h1 style="color: white" id="namepr{{product.prod_id}}">{{product.prod_name}}</h1>
+                <hr>
+                <div class="row mx-2">
+                    <h5 style="color: darkblue;"><b>Price: </b></h5>
+                    <h3 class="mx-3" style="color: rgb(228, 51, 51);"><b>₹{{product.prod_price}}</b></h3>
+                </div>
+                <br>
+                <br>
+                <h4 style="color: white"><b>Description: </b><br>{{product.prod_desc}}</h4>
+                <br>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js%}
+<script>
+ function buyNow(ids) {
+     let cart = {}
+      let idstr = ids.toString();
+
+        qty = 1;
+        name = document.getElementById('name' + idstr).innerHTML
+        cart[idstr] = [qty, name];
+
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+      updateCart(cart);
+      updatePopover(cart);
+      $('#popcart').popover('show');
+
+
+    }
+    </script>
+{% endblock js%}
+
+{% block clearcart %}
+
+for (var item in cart){
+if(document.getElementById('addCart'+item) != null){
+
+document.getElementById('addCart' + item).innerHTML = `<button class="btn btn-md    btn2" style="font-size: 15px" onclick="adCart(this.id)" id="${item}"><i class="fa fa-cart-plus" style="font-size: 16px;"></i> Add to Cart</button>
+`
+}
+}
+{% endblock clearcart %}
+
+{% block Removeitem %}
+document.getElementById('addCart' + key).innerHTML = `<button class="btn btn-md    btn2" style="font-size: 15px" onclick="adCart(this.id)" id="${key}"><i class="fa fa-cart-plus" style="font-size: 16px;"></i> Add to Cart</button>
+`
+{% endblock Removeitem %}
+{% block updatecart %}
+for (var item in cart) {
+if(document.getElementById('addCart'+item) != null){
+document.getElementById('addCart' + item).innerHTML = "<button onclick='minusitem(this.id)' id='minus" + item + "' class='mx-2 btn   btn-sm minus'><i class='fa fa-minus-circle' aria-hidden='true'></i></button> <span id='val" + item + "''>" + '<b>' + cart[item][0] + '</b>' + "</span> <button onclick='plusitem(this.id)' id='plus" + item + "' class='btn   btn-sm my-2 plus'> <i class='fa fa-plus-circle' aria-hidden='true'></i> </button>";
+}
+}
+{% endblock updatecart %}

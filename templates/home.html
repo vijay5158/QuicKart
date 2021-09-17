@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}
+Home
+{% endblock title %}
+{% block body %}
+{% load static %}
+
+
+
+<style>
+  .col-md-3 {
+    display: inline-block;
+    margin-left: -4px;
+  }
+
+
+  .carousel-indicators .active {
+    background-color: blue;
+  }
+
+  .col-md-3 img {
+
+    width: 300px;
+    height: 227px;
+  }
+
+  body .carousel-indicator li {
+    background-color: blue;
+  }
+
+  body .carousel-indicators {
+    bottom: 0;
+  }
+
+  body .carousel-control-prev-icon{
+        margin-top: -530px;
+        margin-right: 100px;
+  }
+  body .carousel-control-next-icon {
+    margin-top: -530px;
+    margin-left: 120px;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    top: auto;
+    bottom: auto;
+  }
+
+  body .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  h5 {
+    font-size: 2.5rem;
+    margin-top: 50px;
+  }
+
+  h6 {
+    font-size: 1.5rem;
+  }
+
+  body {
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
+  .card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+    margin-top: auto;
+
+    height: 227px;
+  }
+
+  .btn1 {
+    width: 100px;
+    height: 52px;
+    margin-left: 12px;
+  }
+
+  .btn2 {
+    width: 70px;
+    height: 53px;
+    display: inline-block;
+    margin-left: 24px;
+
+  }
+</style>
+
+
+
+</head>
+
+<body>
+
+
+
+  <!--        carousel indicators starts from here-->
+
+  <div class="container">
+    {% for product, range, nSlides in allProds %}
+    <h5>{{product.0.prod_category}}</h5>
+    <br>
+
+    <div class="p-3 mb-5 rounded" style="background: rgba(0,0,0,0.7);">
+      <div id="demo{{forloop.counter}}" class="carousel slide carousel-fade my-3 col" data-ride="carousel">
+        <ul class="carousel-indicators">
+          <li data-target="#demo{{forloop.counter}}" data-slide-to="0" class="active"></li>
+          {% for i in range %}
+          <li data-target="#demo{{forloop.parentloop.counter}}" data-slide-to='{{i}}'></li>
+          {% endfor %}
+        </ul>
+
+        <div class="carousel-inner">
+          {% for i in product %}
+          {% if forloop.counter == 1 %}
+          <div class="carousel-item active">
+
+            {% endif %}
+
+            <div class="col-xs-3 col-sm-3 col-md-3">
+              <div class="card" style="width: 14.5rem; background:white;      box-shadow: 2px 10px 20px rgba(0,0,0, 0.7); ">
+                <img src="{{ i.prod_img }}" class="img-thumbnail img-fluid card-img-top" alt="Product Image">
+                <div class="card-body">
+                  <h6 class="card-title" id="namepr{{i.prod_id}}">{{i.prod_name}}</h6>
+                  <p class="card-text">₹{{i.prod_price}}</p>
+                  <div class="row">
+                   <a href="/productview/{{i.prod_id}}"> <button class="btn btn-sm   btn1" id="vp{{i.prod_id}}">View Product</button></a>
+                  <span id="addCartpr{{i.prod_id}}" class="addcart">
+                    <button class="btn btn-sm   btn2" style="font-size: 80%" onclick="adCart(this.id)" id="pr{{i.prod_id}}">Add to Cart</button>
+                  </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last%}
+          </div>
+          <div class="carousel-item">
+            {% endif %}
+            {% endfor %}
+          </div>
+
+
+        </div>
+      </div>
+
+      <a class="carousel-control-prev " href="#demo{{forloop.counter}}" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#demo{{forloop.counter}}" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+
+  </div>
+    {% endfor %}
+  </div>
+  {% endblock %}
+  {% block js %}
+  <script>
+
+  </script>
+
+  {% endblock %}
+  {% block updatecart %}
+  for (var item in cart) {
+  document.getElementById('addCart' + item).innerHTML = "<button onclick='minusitem(this.id)' id='minus" + item + "' class='mx-2 btn   btn-sm minus'><i class='fa fa-minus-circle' aria-hidden='true'></i></button> <span id='val" + item + "''>" + '<b>' + cart[item][0] + '</b>' + "</span> <button onclick='plusitem(this.id)' id='plus" + item + "' class='btn   btn-sm my-2 plus'> <i class='fa fa-plus-circle' aria-hidden='true'></i> </button>";
+  }
+  {% endblock updatecart %}
+  {% block Removeitem %}
+  document.getElementById('addCart' + key).innerHTML = `<button onclick='adCart(this.id)' style="font-size: 80%" class="btn btn-sm   btn2" id="${key}">Add to Cart</button>
+  `
+  {% endblock Removeitem %}
+
+  {% block clearcart %}
+
+  for (var item in cart){
+
+
+  document.getElementById('addCart' + item).innerHTML = `<button onclick='adCart(this.id)' style="font-size: 80%" class="btn btn-sm   btn2" id="${item}">Add to Cart</button>
+  `
+  }
+  {% endblock clearcart %}

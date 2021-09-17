@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block title %} Checkout {% endblock title %}
+
+{% block body %}
+{% load static %}
+</head>
+<body>
+{% if cart_items %}
+<div class="container mainContainer">
+
+<div class="container cartContainer">
+    <table class="cartTable">
+<thead>
+        <tr class="tr-head">
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+</thead>
+        <tbody>
+        {% for product in cart_items %}
+        <tr id="tr{{product.0.prod_id}}">
+            <td scope="row">
+                <div class="product-info">
+                    <img src="/../{{ product.0.prod_img }}" alt="Product image">
+                    <div>
+                        <p>{{ product.0.prod_name }}</p>
+                        <small>Price: ₹ {{ product.0.prod_price }}</small>
+                        <br>
+                        <a href="/" id="{{product.0.prod_id}}" onclick="return handleButton(this.id)">Remove</a>
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                <input value="1" type="number" id="inputState{{product.0.prod_id}}" min="0" onchange="inputHandle(this)" class="form-control1">
+            </td>
+            <td>
+                ₹ <span id="subTotal{{product.0.prod_id}}">{{ product.0.prod_price }}</span>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+</tbody>
+
+    </table>
+
+</div>
+    <hr>
+    <div class="priceContainer container">
+
+        <div class="subtotalPrice container">
+            <br>
+            <div class="totalPrice container">
+                <p>Order Subtotal</p>
+                <p>₹ <span id="sub-total"></span></p></div>
+
+
+
+            <hr>
+            <div class="totalPrice container"><p>Shipping and handling</p>
+                <p>₹ <span id="shipping"></span></p></div>
+
+            <hr>
+            <div class="totalPrice container"><p>Tax</p>
+                <p>₹ <span id="tax"></span></p></div>
+
+            <hr>
+            <div class="totalPrice container">
+<p>Total Price</p>
+            <p>₹ <span id="total"></span></p>
+            </div>
+        </div>
+        <div class="totalPrice container">
+            <a href="/">
+                <button class="btn">Continue Shopping</button>
+            </a>
+            <a href="/checkout/address/">
+            <button class="btn" onclick="checkoutProceed()">Proceed to checkout</button>
+        </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container mainContainer noCart">
+    <img src="{% static 'images/nocart.png' %}" alt="" style="width: 15%;">
+    <div class="container noCart"><p>Hey! it feels so light</p>
+    <small style="margin-bottom: 5px">There is nothing in your cart, let's add some item.</small>
+        <a href="/">  <button class="btn" style="height: 70%">Add Item</button></a>
+    </div>
+</div>
+{% endif %}
+{% endblock body %}
+</body>
+{% block js %}
+<script>
+{% if not user.is_authenticated %}
+alert('Please login first');
+window.location = '/';
+{% endif %}
+
+    if (localStorage.getItem('cart') !== null) {
+
+        finalCart = JSON.parse(localStorage.getItem('cart'));
+    }
+    let carArr = []
+    for (let cartItem in finalCart) {
+        let cartItemId = cartItem.slice(2,);
+        carArr.push(parseInt(cartItemId))
+    }
+    let beckArr = [];
+    let itemPrice = {}
+    {% for product in cart_items %}
+    itemPrice[{{ product.0.prod_id }}] = {{ product.0.prod_price }}
+    beckArr.push({{ product.0.prod_id }})
+
+    {% endfor %}
+
+    const removeTr = (id)=>{
+
+        let tr = document.getElementById('tr'+id);
+        tr.parentNode.removeChild(tr);
+    }
+
+    beckArr.filter(x => !carArr.includes(x)).map(removeTr);
+const handleTotal = ()=>{
+    let subTotal1 = 0;
+    cart = JSON.parse(localStorage.getItem('cart'));
+        for (let cartItem in cart){
+            let cartItemId = cartItem.slice(2,);
+            subTotal1 += parseInt(document.getElementById('subTotal'+cartItemId).innerHTML);
+
+        }
+        subTotal = subTotal1;
+        tax = subTotal * 0.05;
+        let shipping = 99;
+        if (subTotal>599){
+            document.getElementById('shipping').innerHTML = 'Free';
+            shipping = 0;
+        }
+        total = subTotal+shipping+tax;
+        document.getElementById('total').innerHTML = total;
+        document.getElementById('sub-total').innerHTML = subTotal;
+        document.getElementById('tax').innerHTML = tax.toFixed(2);
+        return false;
+    }
+    const inputHandle = (e)=>{
+    let idst1 = e.id.slice(10,);
+
+    let idstr2 = 'pr'+idst1;
+    finalCart[idstr2][0] = e.value;
+
+    if (e.value == '0'){
+        removeTr(idst1)
+        let cart = JSON.parse(localStorage.getItem('cart'))
+        for (let item in cart){
+            if (item == idstr2){
+                delete cart[item]
+            }
+
+        }
+        if (Object.keys(cart).length == 0){
+            window.location.href = '/checkout/'
+        }
+        updatePopover(cart)
+        localStorage.setItem('cart',JSON.stringify(cart))
+        handleTotal()
+    }
+    else {
+        document.getElementById('subTotal'+idst1).innerHTML = itemPrice[idst1] * parseInt(e.value);
+        handleTotal()
+    }
+        updateCart(finalCart);
+    removeitem(finalCart);
+    updatePopover(finalCart);
+}
+if (localStorage.getItem('cart') !== null) {
+
+    finalCart = JSON.parse(localStorage.getItem('cart'));
+}
+let subTotal = 0
+if (Object.keys(finalCart).length != 0){
+for (let cartItem in finalCart){
+    let cartItemId = cartItem.slice(2,);
+    document.getElementById('inputState'+cartItemId).value = finalCart[cartItem][0];
+    document.getElementById('subTotal'+cartItemId).innerHTML = parseInt(document.getElementById('subTotal'+cartItemId).innerHTML) * parseInt(document.getElementById('inputState'+cartItemId).value);
+    subTotal += parseInt(document.getElementById('subTotal'+cartItemId).innerHTML)
+}
+    document.getElementById('sub-total').innerHTML = subTotal;
+let shipping = 99;
+if (subTotal>599){
+    document.getElementById('shipping').innerHTML = 'Free';
+    shipping = 0;
+}
+else{
+    document.getElementById('shipping').innerHTML = shipping;
+
+}
+let tax = subTotal*0.05;
+let total = subTotal+shipping+tax;
+document.getElementById('total').innerHTML = total;
+document.getElementById('tax').innerHTML = tax.toFixed(2);
+
+}
+    const handleButton = (id)=>{
+        let idstr = 'pr'+id;
+        finalCart[idstr][0] = '0';
+        updateCart(finalCart);
+        removeitem(finalCart);
+
+        updatePopover(finalCart);
+        removeTr(id);
+
+handleTotal();
+
+        // document.getElementById('inputState'+id).value = 0;
+        // delete finalCart.idstr;
+        return false;
+    };
+    const checkoutProceed = ()=>{
+        let itemJson = {};
+        for (item in finalCart) {
+            let itemId = item.slice(2);
+            itemJson[itemId] = [finalCart[item][0], itemPrice[itemId]]
+        }
+        let total = document.getElementById('total')
+        itemJson['total'] = total.innerHTML;
+        localStorage.setItem('itemJson', JSON.stringify(itemJson));
+    }
+</script>
+
+{% endblock %}

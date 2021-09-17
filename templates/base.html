@@ -1,0 +1,733 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+  <title> {% block title %} {% endblock title %} </title>
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+    a{
+      text-decoration: none;
+    }
+    body{
+      font-family: 'Audiowide', cursive;
+      font-max-size: 80%;
+    }
+    .noCart{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+    }
+    .bodybg{
+      background:rgba(0,0,0,0.3) url('{% static 'images/48072.jpg' %}');
+      background-repeat:no-repeat;
+      background-size:100%;
+      background-attachment: fixed;
+      width: 100%;
+      height: 100vh;
+    }
+    @media screen and (max-width: 700px) {
+    .bodybg{
+      background:rgba(0,0,0,0.3) url('{% static 'images/bg-mobile.jpg' %}');
+      background-repeat:no-repeat;
+      background-size:100%;
+      background-attachment: fixed;
+      width: 100%;
+      height: 100vh;
+    }
+ 
+}
+    h2{
+      background-color: rgba(220, 53, 69,1);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px 5px 0 0;
+    }
+    #addressContainer{
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+      border-radius: 5px;
+    }
+    .nav-item a:hover{
+      background-color:#dc3545;
+      color: white;
+      border-radius: 3px;
+      box-shadow: 2px 10px 20px rgba(0,0,0, 0.7);
+    }
+    .card-body{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+input{
+  background: rgba(220, 53, 69,0.1);
+  border-color: rgb(220, 53, 69);
+}
+::selection{
+
+  background: rgba(220, 53, 69,0.1);
+
+  color: rgba(220, 53, 69,0.7);
+}
+.heading{
+  text-align: center;
+  background: rgba(220, 53, 69,1);
+  border-radius: 30px;
+  margin: 50px;
+}
+.mainContainer{
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  background: rgba(0,0,0,0.7);
+  color: antiquewhite;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+
+  /*align-items: center;*/
+  justify-content: center;
+  padding: 0px;
+  /*margin: auto;*/
+}
+.leftContainer{
+
+}
+.priceContainer{
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /*margin: auto;*/
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 80%;
+}
+.totalPrice{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.subtotalPrice{
+  display: flex;
+  flex-direction: column;
+}
+hr{
+  border: 0;
+  clear:both;
+  display:block;
+  width: 96%;
+  background-color: grey;
+  height: 1px;
+}
+
+.rightContainer{
+  flex: 30%;
+  background: rgba(0,0,0,0.8);
+  color: antiquewhite;
+  display: flex;
+  /* flex: 80%; */
+  /* border-radius: 14px; */
+  padding: 0px;
+   margin-left: 10px;
+  /* display: flex; */
+  margin-bottom: 10px;
+  height: 60vh;
+}
+table{
+  width: 100%;
+}
+.tr-head{
+  background: rgba(220, 53, 69,1);
+  color: white;
+}
+.tr-head th{
+  padding: 10px;
+}
+.product-info{
+  display: flex;
+  flex-direction: row;
+  /*flex-wrap: wrap;*/
+  padding: 10px;
+}
+.product-info img{
+  width: 100px;
+  border: 1px solid white;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+.product-info div a{
+
+  text-decoration: none;
+  color: rgba(220, 53, 69,1);
+}
+    .product-info div a:hover{
+    color: #ad1c2a;
+    }
+.product-info div{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.cartContainer{
+
+  display: flex;
+  /*flex: 80%;*/
+   border-radius: 5px;
+  padding: 0px;
+  /* margin: 10px; */
+  /* display: flex; */
+  margin-bottom: 10px;
+}
+.form-control1{
+  width: 20%;
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  /*-webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);*/
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  color: #555;
+  font-size: inherit;
+  margin: 0;
+  overflow: hidden;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  background-color: rgba(220, 53, 69,0.5);
+  color: white;
+}
+.form-control:focus {
+  border: 2px solid rgba(220, 53, 69,0.3);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.heading h1 {
+  color: white;
+  margin: 10px;
+  font-size: xx-large;
+}
+
+    .btn{
+      background: #dc3545;
+      outline: none !important;
+      /*background: linear-gradient(45deg, #dc3545,transparent);*/
+      color: white;
+      border: 2px solid #dc3545;
+      /*border-radius: 10px;*/
+      box-shadow: 2px 10px 20px rgba(0,0,0, 0.7);
+    }
+    .nav-link{
+      color: black;
+    }
+    a{
+      color:#dc3545;
+      text-decoration:none;
+    }
+    .md-form{
+      display:flex;
+      flex-direction:row;
+      margin:auto;
+      align-item:center;
+    }
+    .icon-style{
+      color:white;
+      font-size:20px;
+      margin-right:5px;
+    }
+
+.modalul{
+  display: flex;
+    flex-direction: row;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    padding: 13px;
+    width:70%;
+}
+{% block css %}
+{% endblock css %}
+  </style>
+</head>
+
+<body class="bodybg"   style="">
+  <nav
+    class="navbar p-3 mb-5 rounded navbar-default navbar-expand-lg navbar-white navbar-fixed-top" style="background: rgba(0,0,0,0.3); box-shadow: 2px 10px 20px rgba(0,0,0, 0.7); ">
+    <a class="navbar-brand" style="color:black" href="/">QuicKart</a>
+    <button class="navbar-toggler bg-dark" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="height: 10px;">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link"  href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+           {% if user.is_authenticated %}
+        
+        <li class="nav-item">
+          <a class="nav-link mr-2"  href="/tracker/">Orders</a>
+        </li>
+        {% endif %}
+     
+        <li class="nav-item">
+          <a class="nav-link"  href="/about/">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  href="/contact/">Contact Us</a>
+        </li>
+
+
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" action="/search/">
+        <input class="form-control mr-sm-2 " id="search" name="search" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn my-2 my-sm-0" type="submit">Search</button>
+      </form>
+ {% if user.is_authenticated %}
+      
+      <div class="dropdown ml-2">
+  <button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-user" style="font-size: 24px;"></i>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Account</a>
+    <a class="dropdown-item" href="/logout/">LogOut</a>
+  </div>
+</div>
+      {% else %}
+     <!--Modal: Login / Register Form-->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog cascading-modal" role="document">
+    <!--Content-->
+    <div class="modal-content" style="background:rgba(0,0,0,0.7)">
+
+      <!--Modal cascading tabs-->
+      <div class="modal-c-tabs">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs modalul md-tabs tabs-2 light-blue darken-3" role="tablist">
+          <li class="nav-item1">
+            <a class="btn nav-link1 active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
+              Login</a>
+          </li>
+          <li class="nav-item1 ml-2">
+     <a class="nav-link1 btn" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
+              Register</a>
+          </li>
+        </ul>
+
+        <!-- Tab panels -->
+        <div class="tab-content">
+          <!--Panel 7-->
+          <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+            <!--Body-->
+            <div class="modal-body mb-1">
+            <form method="post" action="/login/">
+            {% csrf_token %}
+              <div class="md-form form-sm mb-3">
+                <i class="fas fa-envelope prefix icon-style"></i>
+                <input type="email" id="loginemail" name="loginemail" placeholder="Your email" class="form-control form-control-sm validate">
+                
+              </div>
+
+              <div class="md-form form-sm mb-3">
+                <i class="fas fa-lock prefix icon-style"></i>
+                <input type="password" placeholder="Your password" id="loginpassword" name="loginpassword" class="form-control form-control-sm validate">
+                
+              </div>
+              <div class="text-center mt-2">
+              
+                 <button class="btn" type="submit">Log in <i class="fas fa-sign-in ml-1" style="color:white" ></i></button>
+              </div>
+              </form>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">
+              <div class="options text-center text-md-right mt-1">
+                <p style="color:white" >Not a member? <a href="#">Sign Up</a></p>
+                <p style="color:white">Forgot <a href="#">Password?</a></p>
+              </div>
+            </div>
+
+          </div>
+          <!--/.Panel 7-->
+
+          <!--Panel 8-->
+          <div class="tab-pane fade" id="panel8" role="tabpanel">
+
+            <!--Body-->
+            <div class="modal-body">
+            <form method="post" action="/signup/">
+            {% csrf_token %} 
+               <div class="md-form form-sm mb-3">
+                <i class="fas fa-user prefix icon-style"></i>
+                <input placeholder="Your First Name" type="text" name="first-name" id="first-name"class="form-control form-control-sm validate">
+                <input placeholder="Your Last Name" name="last-name" type="text" id="last-name" style=" margin-left:5px" class="form-control form-control-sm validate">
+              </div>
+
+    
+              <div class="md-form form-sm mb-3">
+                <i class="fas fa-envelope prefix icon-style"></i>
+                <input placeholder="Your email" type="email" id="signupemail" name="signupemail" class="form-control form-control-sm validate">
+              </div>
+
+              <div class="md-form form-sm mb-3">
+                <i class="fas fa-lock prefix icon-style"></i>
+                <input type="password" placeholder="Your password" id="password1" name="password1" class="form-control form-control-sm validate">
+              </div>
+
+              <div class="md-form form-sm mb-3">
+                <i class="fas fa-lock prefix icon-style"></i>
+                <input type="password" placeholder="Repeat password" id="password2" name="password2" class="form-control form-control-sm validate">
+               </div>
+
+              <div class="text-center form-sm mt-2">
+             <button class="btn" type="submit" >Sign up <i class="fas fa-sign-in ml-1" style="color:white" ></i></button>
+              </div>
+</form>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">
+              <div class="options text-right">
+                <p class="pt-1" style="color:white">Already have an account? <a href="#">Log In</a></p>
+              </div>
+            </div>
+          </div>
+          <!--/.Panel 8-->
+        </div>
+
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: Login / Register Form-->
+
+<div class="text-center">
+  <a href="" class="btn btn-outline-error btn-rounded my-3 ml-2" data-toggle="modal" data-target="#loginModal">
+  LogIn/Register</a>
+</div>
+
+      {% endif %}
+
+      <a href="#" id="popcart" tabindex="0" role="button" class="btn btn-sm popovers mx-2" data-toggle="popover"
+        data-placement="bottom" data-content="cart items" data-original-title="<h3>Your cart</h3>"><i
+          class="fa fa-shopping-cart" style="font-size: 24px;"></i>(<span id="cart">0</span>)</a>
+    </div>
+  </nav>
+
+  {% block body %}
+  {% endblock %}
+  <!-- Footer -->
+  <div class="footerflex">
+  <footer style="background: rgba(0,0,0,0.7); color: white; font-family: 'Ubuntu Light';" class="page-footer font-small stylish-color-dark pt-4">
+
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left" style="max-height: 300px">
+
+      <!-- Grid row -->
+      <div class="row">
+
+        <!-- Grid column -->
+        <div class="col-md-4 mx-auto">
+
+          <!-- Content -->
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Footer Content</h5>
+          <p>Here you can use rows and columns to organize your footer content. Lorem ipsum dolor sit amet,
+            consectetur
+            adipisicing elit.</p>
+
+        </div>
+        <!-- Grid column -->
+
+        <hr class="clearfix w-100 d-md-none">
+
+        <!-- Grid column -->
+        <div class="col-md-2 mx-auto">
+
+          <!-- Links -->
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4" style="color: lightgray; text-decoration:none;">Links</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 1</a>
+            </li>
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 2</a>
+            </li>
+            <li>
+              <a href="#!"style="color: lightgray; text-decoration:none;">Link 3</a>
+            </li>
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 4</a>
+            </li>
+          </ul>
+
+        </div>
+        <!-- Grid column -->
+
+        <hr class="clearfix w-100 d-md-none">
+
+        <!-- Grid column -->
+        <div class="col-md-2 mx-auto">
+
+          <!-- Links -->
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4" style="color: lightgray; text-decoration:none;">Links</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 1</a>
+            </li>
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 2</a>
+            </li>
+            <li>
+              <a href="#!"style="color: lightgray; text-decoration:none;">Link 3</a>
+            </li>
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 4</a>
+            </li>
+          </ul>
+
+        </div>
+        <!-- Grid column -->
+
+        <hr class="clearfix w-100 d-md-none">
+
+        <!-- Grid column -->
+        <div class="col-md-2 mx-auto">
+
+          <!-- Links -->
+          <h5 class="font-weight-bold text-uppercase mt-3 mb-4" style="color: lightgray; text-decoration:none;">Links</h5>
+
+          <ul class="list-unstyled">
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 1</a>
+            </li>
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 2</a>
+            </li>
+            <li>
+              <a href="#!"style="color: lightgray; text-decoration:none;">Link 3</a>
+            </li>
+            <li>
+              <a href="#!" style="color: lightgray; text-decoration:none;">Link 4</a>
+            </li>
+          </ul>
+
+        </div>
+        <!-- Grid column -->
+
+      </div>
+      <!-- Grid row -->
+
+    </div>
+    <!-- Footer Links -->
+
+    <hr>
+
+    <!-- Call to action -->
+    <ul class="list-unstyled list-inline text-center py-2">
+      <li class="list-inline-item">
+        <h5 class="mb-1">Register for free</h5>
+      </li>
+      <li class="list-inline-item">
+        <a href="#!" class="btn btn-danger btn-rounded" data-toggle="modal" data-target="#loginModal">
+        Sign up!</a>
+      </li>
+    </ul>
+    <!-- Call to action -->
+
+    <hr>
+
+    <!-- Social buttons -->
+    <ul class="list-unstyled list-inline text-center">
+      <li class="list-inline-item">
+        <a class="btn-floating btn-fb mx-1" href="/" style="color: white">
+          <i class="fab fa-facebook-f"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-li mx-1" href="/" style="color: white">
+          <i class="fab fa-twitter"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-gplus mx-1" href="/" style="color: white">
+          <i class="fab fa-google-plus-g"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-li mx-1" href="/" style="color: white">
+          <i class="fab fa-linkedin-in"> </i>
+        </a>
+      </li>
+      <li class="list-inline-item">
+        <a class="btn-floating btn-dribbble mx-1" href="/" style="color: white">
+          <i class="fab fa-dribbble"> </i>
+        </a>
+      </li>
+    </ul>
+    <!-- Social buttons -->
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+      <a href="/" style="color: white; text-decoration: none"> quickart.com</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  </div>
+  <!-- Footer -->
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+  {% block js %}
+  {% endblock js %}
+  <script>
+    if (localStorage.getItem('cart') == null) {
+      var cart = {};
+    }
+    else {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+      updateCart(cart);
+      removeitem(cart);
+      updatePopover(cart);
+
+    }
+    function adCart(ids) {
+
+      let idstr = ids.toString();
+      if (cart[idstr] != undefined) {
+        qty = cart[idstr][0] + 1;
+
+      } else {
+        qty = 1;
+        name = document.getElementById('name' + idstr).innerHTML
+        cart[idstr] = [qty, name];
+
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+      updateCart(cart);
+      updatePopover(cart);
+      $('#popcart').popover('show');
+
+
+    }
+    
+    $('#popcart').popover({ html: true })
+    function updateCart(cart) {
+
+
+      {% block updatecart %}
+      {% endblock updatecart %}
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+    }
+
+    function minusitem(ids) {
+      var idstr1 = ids.slice(5,);
+      cart[idstr1][0] -= 1;
+      cart[idstr1][0] = Math.max(0, cart[idstr1][0]);
+      document.getElementById('val' + idstr1).innerHTML = cart[idstr1][0];
+      updateCart(cart);
+      removeitem(cart);
+      updatePopover(cart);
+      $('#popcart').popover('show');
+    }
+    function removeitem(cart) {
+      for (var key in cart) {
+        if (cart[key][0] == 0) {
+          delete cart[key]
+          {% block Removeitem %}
+          {% endblock Removeitem %}
+        }
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      document.getElementById('cart').innerHTML = Object.keys(cart).length;
+
+    }
+    function plusitem(ids) {
+      var idstr1 = ids.slice(4,);
+      cart[idstr1][0] += 1;
+
+      document.getElementById('val' + idstr1).innerHTML = cart[idstr1][0];
+      updateCart(cart);
+      removeitem(cart);
+      updatePopover(cart);
+      $('#popcart').popover('show');
+    }
+    updatePopover(cart);
+    function clearCart() {
+      cart = JSON.parse(localStorage.getItem('cart'));
+      {% block clearcart %}
+      {% endblock clearcart %}
+      localStorage.clear();
+      cart = {};
+      updateCart(cart);
+      updatePopover(cart);
+      $('#popcart').popover('hide');
+    }
+    function updatePopover(cart) {
+      var popStr = "";
+      popStr = popStr + "<div class='mx-2 my-2'>";
+      itemIds = [];
+      var i = 1;
+      for (var item in cart) {
+        popStr = popStr + "<b>" + i + "</b>. ";
+        popStr = popStr + cart[item][1].slice(0, 19) + "... Qty: " + cart[item][0] + '<br>';
+        i = i + 1;
+        itemIds.push(item.slice(2))
+
+      }
+      popStr += `<hr><div class="d-flex" style="align-items: center; justify-content: center"><a href="/checkout/${itemIds}"><button style="margin:10px;" class="my-2 btn btn-sm  " id="checkout">Checkout</button></a>
+      <a href="/"><button style="margin:10px;" onclick="clearCart()" class="my-2 btn btn-sm  " id="checkout">Clear Cart</button></a> </div>`
+      popStr = popStr + "</div>"
+      document.getElementById('popcart').setAttribute('data-content', popStr);
+      $('#popcart').popover({ html: true });
+      }
+    $('body').on('click', function (e) {
+      $('[data-toggle="popover"]').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+          $(this).popover('hide');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

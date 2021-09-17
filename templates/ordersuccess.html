@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Ordered {% endblock title %}
+{% block body %}
+{% if thank %}
+<div class='container mb-5 d-flex rounded align-items-center bg-transparent mainContainer'>
+                    
+ <div class="px-4 mb-3 rounded py-5 w-75" style="background:rgba(0,0,0,0.8)">
+
+<h3 class="header" style="color: #dc3545;">{{ request.user.first_name }}  {{ request.user.last_name }}</h3>
+    <h4 class="mt-5 theme-color mb-5">Thanks for your order</h4> <span class="theme-color">Payment Summary</span>
+                    <div class="mb-3">
+                        <hr class="new1">
+                    </div>
+                    <div class="d-flex justify-content-between"> <span class="font-weight-bold">Order id </span> <span class="text-muted">{{ id }}</span> </div>
+                    <div class="d-flex justify-content-between"> <small>Payment Type</small> <small>{{ payment_mode }}</small> </div>
+                    <div class="d-flex justify-content-between"> <small>Order time</small> <small>{{ date }}</small> </div>
+                    <div class="d-flex justify-content-between mt-3"> <span class="font-weight-bold">Total</span> <span class="font-weight-bold theme-color">₹{{ total_price }}</span> </div>
+                    <div class="text-center mt-5"><a href="/tracker/"> <button class="btn">Track your order</button> </a></div>
+                </div>
+</div>
+{% endif %}
+                {% endblock body %}
+
+                {% block js %}
+<script>
+localStorage.clear();
+</script>
+                {% endblock js %}
